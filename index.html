@@ -36,12 +36,14 @@
   </div>
   <canvas id="canvas" width="800" height="500"></canvas>
 
-  <script>
-    setInterval(() => {
+  setInterval(() => {
   const now = new Date();
   const timeStr = now.toLocaleTimeString("ja-JP", { hour12: false });
   document.getElementById("clock").textContent = timeStr;
 }, 1000);
+  
+  <script>
+
 
     const edges = [
       [[1, 4], [2, 5], [3, 6]],
