@@ -36,12 +36,7 @@
   </div>
   <canvas id="canvas" width="800" height="500"></canvas>
 
-  setInterval(() => {
-  const now = new Date();
-  const timeStr = now.toLocaleTimeString("ja-JP", { hour12: false });
-  document.getElementById("clock").textContent = timeStr;
-}, 1000);
-  
+
   <script>
 
 
@@ -152,6 +147,11 @@
       drawPath(path);
       alert(`${destChar}駅までの最適経路:\n` + path.map(i => String.fromCharCode(65 + i) + "駅").join(" → "));
     }
+     setInterval(() => {
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString("ja-JP", { hour12: false });
+  document.getElementById("clock").textContent = timeStr;
+}, 1000);
   </script>
 </body>
 </html>
