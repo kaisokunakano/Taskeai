@@ -36,15 +36,15 @@
   </div>
   <canvas id="canvas" width="800" height="500"></canvas>
 <div id="clock" style="position: absolute; top: 10px; right: 20px; font-size: 18px; font-weight: bold;"></div>
+
+
+  <script>
+
 setInterval(() => {
       const now = new Date();
       const timeStr = now.toLocaleTimeString("ja-JP", { hour12: false });
       document.getElementById("clock").textContent = timeStr;
       }, 1000);
-
-  <script>
-
-
     const edges = [
       [[1, 4], [2, 5], [3, 6]],
       [[4, 7], [5, 2]],
