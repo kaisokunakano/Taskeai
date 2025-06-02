@@ -4,6 +4,32 @@
   <meta charset="UTF-8">
   <title>通勤ルート可視化</title>
   <style>
+    /* 画面サイズに応じてレイアウトを調整 */
+@media screen and (max-width: 600px) {
+  .container {
+    padding: 20px;
+  }
+  input, button {
+    width: 100%;
+    font-size: 18px;
+  }
+  #canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+/* 全体にレスポンシブ対応 */
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
     body {
       font-family: "Noto Sans", sans-serif;
       text-align: center;
