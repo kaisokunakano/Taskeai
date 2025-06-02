@@ -87,25 +87,28 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-    function dijkstra(edges, numNodes) {
-      const node = Array(numNodes).fill(Infinity);
-      node[0] = 0;
-      const parent = Array(numNodes).fill(-1);
-      const nodeName = [...Array(numNodes).keys()];
+   function dijkstra(edges, numNodes) {
+  const node = Array(numNodes).fill(Infinity);
+  node[0] = 0;
+  const parent = Array(numNodes).fill(-1);
+  const nodeName = [...Array(numNodes).keys()];
 
-      while (nodeName.length > 0) {
-        const r = nodeName.reduce((a, b) => node[a] < node[b] ? a : b);
-        nodeName.splice(nodeName.indexOf(r), 1);
-        for (const [goal, users] of edges[r]) {
-          const weight = users > 0 ? 1 / users : Infinity;
-          if (node[r] + weight < node[goal]) {
-            node[goal] = node[r] + weight;
-            parent[goal] = r;
-          }
-        }
+  while (nodeName.length > 0) {
+    const r = nodeName.reduce((a, b) => node[a] < node[b] ? a : b);
+    nodeName.splice(nodeName.indexOf(r), 1);
+
+    for (const [goal, people] of edges[r]) {
+      const weight = people > 0 ? 1 / people : Infinity;
+      if (node[r] + weight < node[goal]) {
+        node[goal] = node[r] + weight;
+        parent[goal] = r;
       }
-      return { node, parent };
     }
+  }
+
+  return { node, parent };
+}
+
      function findCost() {
       const destChar = document.getElementById("destination").value.toUpperCase();
       const destIndex = destChar.charCodeAt(0) - "A".charCodeAt(0);
