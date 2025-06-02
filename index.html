@@ -106,4 +106,24 @@
       }
       return { node, parent };
     }
+     function findCost() {
+      const destChar = document.getElementById("destination").value.toUpperCase();
+      const destIndex = destChar.charCodeAt(0) - "A".charCodeAt(0);
+      if (destIndex < 0 || destIndex > 9) {
+        alert("A〜Jの範囲で駅名を入力してください。");
+        return;
+      }
+      const { node, parent } = dijkstra(edges, 10);
+      const path = reconstructPath(parent, destIndex);
+      drawPath(path);
+      alert(`${destChar}駅までの最適経路:\n` + path.map(i => String.fromCharCode(65 + i) + "駅").join(" → "));
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById("clock").textContent = now.toLocaleTimeString();
+    }, 1000);
+  </script>
+</body>
+</html>
 
