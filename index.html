@@ -4,48 +4,45 @@
   <meta charset="UTF-8">
   <title>通勤ルート可視化</title>
   <style>
-    /* 画面サイズに応じてレイアウトを調整 */
-@media screen and (max-width: 600px) {
-  container {
-    padding: 20px;
-  }
-  input, button {
-    width: 100%;
-    font-size: 18px;
-  }
-  #canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-}
-
-/* 全体にレスポンシブ対応 */
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+    /* レスポンシブ対応 */
+    @media screen and (max-width: 600px) {
+      .container {
+        padding: 20px;
+        width: 90%;
+      }
+      input, button {
+        width: 100%;
+        font-size: 18px;
+      }
+      #canvas, canvas {
+        width: 100% !important;
+        height: auto !important;
+      }
+    }
 
     body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: "Noto Sans", sans-serif;
       text-align: center;
       background: #ffffff;
     }
+
     #canvas {
       border: 1px solid #ccc;
       background: white;
       margin-top: 20px;
     }
+
     .container {
       background: #00ada9;
       padding: 40px;
       color: white;
       width: 60%;
+      margin: 0 auto;
     }
+
     input, button {
       font-size: 16px;
       padding: 5px 10px;
@@ -55,19 +52,17 @@ body {
 </head>
 <body>
   <div id="clock" style="position: absolute; top: 0px; right: 0px; font-size: 50px;"></div>
+
   <div class="container">
     <h1>Xさんの通勤ルート</h1>
     <p>目的地駅を入力してください（A〜J）:</p>
     <input type="text" id="destination" maxlength="1">
     <button onclick="findCost()">経路を計算</button>
   </div>
- <canvas id="canvas" width="1300" height="500"></canvas>
 
-
+  <canvas id="canvas" width="1300" height="500"></canvas>
 
   <script>
-
-
     const edges = [
       [[1, 4], [2, 5], [3, 6]],
       [[4, 7], [5, 2]],
@@ -116,74 +111,3 @@ body {
       let current = destination;
       while (current !== -1) {
         path.push(current);
-        current = parent[current];
-      }
-      return path.reverse();
-    }
-
-    function drawPath(path) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const connections = [
-        [0, 1], [0, 2], [0, 3],
-        [1, 4], [1, 5],
-        [2, 4], [2, 5],
-        [3, 4], [3, 6],
-        [4, 5], [4, 7],
-        [5, 6], [5, 7], [5, 8],
-        [6, 9],
-        [7, 8], [7, 9],
-        [8, 9]
-      ];
-
-      for (const [a, b] of connections) {
-        const [x1, y1] = positions[a];
-        const [x2, y2] = positions[b];
-        const inPath = path.includes(a) && path.includes(b) &&
-                       Math.abs(path.indexOf(a) - path.indexOf(b)) === 1;
-        ctx.strokeStyle = inPath ? "gray" : "#cccccc";
-        ctx.lineWidth = inPath ? 4 : 1;
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.lineTo(x2, y2);
-        ctx.stroke();
-      }
-
-      for (const [node, [x, y]] of Object.entries(positions)) {
-        const inPath = path.includes(parseInt(node));
-        ctx.fillStyle = inPath ? "yellow" : "white";
-        ctx.beginPath();
-        ctx.arc(x, y, 20, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
-        ctx.fillStyle = "black";
-        ctx.font = "12px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(String.fromCharCode(65 + parseInt(node)) + "駅", x, y + 4);
-      }
-    }
-
-    function findCost() {
-      const destChar = document.getElementById("destination").value.toUpperCase();
-      const destIndex = destChar.charCodeAt(0) - "A".charCodeAt(0);
-      if (destIndex < 0 || destIndex > 9) {
-        alert("A〜Jの範囲で駅名を入力してください。");
-        return;
-      }
-      const { node, parent } = dijkstra(edges, 10);
-      const path = reconstructPath(parent, destIndex);
-      drawPath(path);
-      alert(${destChar}駅までの最適経路:\n + path.map(i => String.fromCharCode(65 + i) + "駅").join(" → "));
-    }
-setInterval(() => {
-  const now = new Date();
-  document.getElementById("clock").textContent = now.toLocaleTimeString();
-}, 1000);
-
-
-    
-  </script>
-</body>
-</html>
-
-
