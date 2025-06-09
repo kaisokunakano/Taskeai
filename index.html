@@ -1,4 +1,69 @@
-<script>
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>通勤ルート可視化</title>
+  <style>
+    /* レスポンシブ対応 */
+    @media screen and (max-width: 600px) {
+      .container {
+        padding: 20px;
+        width: 90%;
+      }
+      input, button {
+        width: 100%;
+        font-size: 18px;
+      }
+      #canvas, canvas {
+        width: 100% !important;
+        height: auto !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Noto Sans", sans-serif;
+      text-align: center;
+      background: #ffffff;
+    }
+
+    #canvas {
+      border: 1px solid #ccc;
+      background: white;
+      margin-top: 20px;
+    }
+
+    .container {
+      background: #00ada9;
+      padding: 40px;
+      color: white;
+      width: 1300px;
+      margin: 0 auto;
+      box-sizing: border-box;
+    }
+
+    input, button {
+      font-size: 16px;
+      padding: 5px 10px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="clock" style="position: absolute; top: 0px; right: 0px; font-size: 50px;"></div>
+
+  <div class="container">
+    <h1>Xさんの通勤ルート</h1>
+    <p>目的地駅を入力してください（A〜J）:</p>
+    <input type="text" id="destination" maxlength="1">
+    <button onclick="findCost()">経路を計算</button>
+  </div>
+
+  <canvas id="canvas" width="1300" height="500"></canvas>
+
+  <script>
   const edges = [
     [[1, 4], [2, 5], [3, 6]],
     [[4, 7], [5, 2]],
@@ -119,4 +184,7 @@
   // 初期描画
   drawGraph();
 </script>
+
+</body>
+</html>
 
