@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>通勤ルート可視化</title>
   <style>
-    /* レスポンシブ対応 */
     @media screen and (max-width: 600px) {
       .container {
         padding: 20px;
@@ -87,29 +86,68 @@
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
-   function dijkstra(edges, numNodes) {
-  const node = Array(numNodes).fill(Infinity);
-  node[0] = 0;
-  const parent = Array(numNodes).fill(-1);
-  const nodeName = [...Array(numNodes).keys()];
+    function dijkstra(edges, numNodes) {
+      const node = Array(numNodes).fill(Infinity);
+      node[0] = 0;
+      const parent = Array(numNodes).fill(-1);
+      const nodeName = [...Array(numNodes).keys()];
 
-  while (nodeName.length > 0) {
-    const r = nodeName.reduce((a, b) => node[a] < node[b] ? a : b);
-    nodeName.splice(nodeName.indexOf(r), 1);
+      while (nodeName.length > 0) {
+        const r = nodeName.reduce((a, b) => node[a] < node[b] ? a : b);
+        nodeName.splice(nodeName.indexOf(r), 1);
 
-    for (const [goal, people] of edges[r]) {
-      const weight = people > 0 ? 1 / people : Infinity;
-      if (node[r] + weight < node[goal]) {
-        node[goal] = node[r] + weight;
-        parent[goal] = r;
+        for (const [goal, people] of edges[r]) {
+          const weight = people > 0 ? 1 / people : Infinity;
+          if (node[r] + weight < node[goal]) {
+            node[goal] = node[r] + weight;
+            parent[goal] = r;
+          }
+        }
       }
+
+      return { node, parent };
     }
-  }
 
-  return { node, parent };
-}
+    function reconstructPath(parent, dest) {
+      const path = [];
+      let current = dest;
+      while (current !== -1) {
+        path.unshift(current);
+        current = parent[current];
+      }
+      return path;
+    }
 
-     function findCost() {
+    function drawPath(path) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#000";
+      ctx.font = "16px sans-serif";
+
+      // 駅を描画
+      for (let i = 0; i < Object.keys(positions).length; i++) {
+        const [x, y] = positions[i];
+        ctx.beginPath();
+        ctx.arc(x, y, 10, 0, 2 * Math.PI);
+        ctx.fillStyle = "#555";
+        ctx.fill();
+        ctx.fillStyle = "#000";
+        ctx.fillText(String.fromCharCode(65 + i), x - 5, y - 15);
+      }
+
+      // 経路を描画
+      ctx.strokeStyle = "red";
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      for (let i = 0; i < path.length - 1; i++) {
+        const [x1, y1] = positions[path[i]];
+        const [x2, y2] = positions[path[i + 1]];
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+      }
+      ctx.stroke();
+    }
+
+    function findCost() {
       const destChar = document.getElementById("destination").value.toUpperCase();
       const destIndex = destChar.charCodeAt(0) - "A".charCodeAt(0);
       if (destIndex < 0 || destIndex > 9) {
@@ -119,7 +157,7 @@
       const { node, parent } = dijkstra(edges, 10);
       const path = reconstructPath(parent, destIndex);
       drawPath(path);
-     alert(`${destChar}駅までの最適経路:\n` + path.map(i => String.fromCharCode(65 + i) + "駅").join(" → "));
+      alert(`${destChar}駅までの最適経路:\n` + path.map(i => String.fromCharCode(65 + i) + "駅").join(" → "));
     }
 
     setInterval(() => {
